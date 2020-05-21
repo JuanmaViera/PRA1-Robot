@@ -1,4 +1,4 @@
-{
+{	//Point 3 of the path-planning module
 	"class": "pid_controller.path_planning_controller",
 	"grid_size": 30,
 	"waypoints": [[40, 40], [310, 300], [290, 300], 
