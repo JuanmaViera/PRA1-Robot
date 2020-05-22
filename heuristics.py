@@ -52,7 +52,7 @@ def euclidean(point, point2):
     x0, y0 = point.grid_point
     x1, y1 = point2.grid_point
 
-    return pp.math.sqrt((x1-x0)^2 + (y1-y0)^2)
+    return pp.math.sqrt((x1-x0)**2 + (y1-y0)**2)
 
 pp.register_heuristic('euclidean', euclidean)
 
