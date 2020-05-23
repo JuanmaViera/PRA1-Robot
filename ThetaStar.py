@@ -54,7 +54,7 @@ def children(point,grid):
 
 def thetaStar(start, goal, grid, heur='naive'):
     """
-        Executes the A* path planning algorithm over a given grid.
+        Executes the Theta* path planning algorithm over a given grid.
         Inputs:
             - start: node from which to start.
             - goal: node to which it is desired to arrive.
@@ -97,7 +97,6 @@ def thetaStar(start, goal, grid, heur='naive'):
                 continue
             #Otherwise if it is already in the open set
             if node in openset:
-                #Check if we beat the G score
                 new_g = current.G + current.move_cost(node)
                 if lineOfSight(current.parent, node, grid):
                     if (current.parent.G + current.parent.move_cost(node)) < node.G:
@@ -119,9 +118,11 @@ def thetaStar(start, goal, grid, heur='naive'):
                 openset.add(node)
     #Throw an exception if there is no path
     raise ValueError('No Path Found')
-
+    
+#Register the new algorithm
 pp.register_search_method('Theta*', thetaStar)
 
+#Returns true if there is line of sight between two points, false otherwise.
 def lineOfSight (s,sp, grid):
     x0,y0 = s.grid_point
     sx,sy = s.grid_point
