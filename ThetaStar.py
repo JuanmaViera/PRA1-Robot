@@ -122,7 +122,13 @@ def thetaStar(start, goal, grid, heur='naive'):
 #Register the new algorithm
 pp.register_search_method('Theta*', thetaStar)
 
-#Returns true if there is line of sight between two points, false otherwise.
+def checkObst(nodo,grid):
+
+        x = nodo[0]
+        y = nodo[1]
+
+        return(grid[int(x)][int(y)].value >= 5)
+
 def lineOfSight (s,sp, grid):
     x0,y0 = s.grid_point
     sx,sy = s.grid_point
@@ -145,26 +151,34 @@ def lineOfSight (s,sp, grid):
         while x0 != x1:
             f = f+dy
             if f >= dx:
-                if grid[x0 + ((sx-1)//2)][y0 + ((sy-1)//2)]:
+                nodo = [x0 + ((sx-1)//2), y0 + ((sy-1)//2)]
+                if checkObst(nodo, grid):
                     return False
                 y0 = y0 + sy
                 f = f - dx
-            if f != 0 and grid[x0 + ((sx-1)//2)][y0 + ((sy-1)//2)]:
+            nodo = [x0 + ((sx-1)//2), y0 + ((sy-1)//2)]
+            if f != 0 and checkObst(nodo, grid):
                 return False
-            if dy == 0 and grid[x0 + ((sx-1)//2)][y0] and grid[x0 + ((sx-1)//2)][y0 -1]:
+            nodo = [x0 + ((sx-1)//2), y0]
+            nodo2 = [x0 + ((sx-1)//2), y0 - 1]
+            if dy == 0 and checkObst(nodo,grid) and checkObst(nodo2, grid):
                 return False
             x0 = x0 + sx
     else:
         while y0 != y1:
             f = f + dx
             if f >= dy:
-                if grid[x0 + ((sx-1)//2)][y0 + ((sy-1)//2)]:
+                nodo = [x0 + ((sx-1)//2), y0 + ((sy-1)//2)]
+                if checkObst(nodo, grid):
                     return False
                 x0 = x0 + sx
                 f = f - dy
-            if f == 0 and grid[x0 + ((sx-1)//2)][y0 + ((sy-1)//2)]:
+            nodo = [x0 + ((sx-1)//2), y0 + ((sy-1)//2)]
+            if f == 0 and checkObst(nodo, grid):
                 return False
-            if dx == 0 and grid[x0][y0 + ((sy-1)//2)] and grid[x0 - 1][y0 + ((sy-1)//2)]:
+            nodo = [x0, y0 + ((sy-1)//2)]
+            nodo2 = [x0 - 1,y0 + ((sy-1)//2)]
+            if dx == 0 and checkObst(nodo , grid) and checkObst(nodo2, grid):
                 return False
             y0 = y0 + sy
     return True
