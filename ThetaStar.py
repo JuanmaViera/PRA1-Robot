@@ -98,7 +98,7 @@ def thetaStar(start, goal, grid, heur='naive'):
             #Otherwise if it is already in the open set
             if node in openset:
                 new_g = current.G + current.move_cost(node)
-                if lineOfSight(current.parent, node, grid):
+                if current.parent != None and lineOfSight(current.parent, node, grid):
                     if (current.parent.G + current.parent.move_cost(node)) < node.G:
                         node.G = current.parent.G + current.parent.move_cost(node)
                         node.parent = current.parent
