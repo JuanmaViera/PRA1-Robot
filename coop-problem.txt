@@ -1,0 +1,22 @@
+(define (problem coop-problem)
+    (:domain coop)
+    
+    (:objects   r - vehicle
+                p0305 p2718 p1514- point)
+    
+    (:init  (at p0305 r)
+            (reachable p0305 p2718)
+            
+            (= (battery-level) 100)
+            (= (battery-capacity) 100)
+            (= (recharge-rate) 100)
+            (= (take-picture-time) 5)
+            (= (battery-consumed-taking-picture) 10)
+            (= (total-energy-used) 0)
+            (= (total-distance-travelled) 0)
+            (= (total-duration-mission) 0)
+    )
+    
+    (:goal (and (at r p2718)
+                (has-image r p1514)))
+)

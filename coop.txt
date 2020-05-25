@@ -1,0 +1,56 @@
+(define (domain coop)
+	(:requirements :durative-actions :typing :fluents :constraints :preferences)
+	(:types vehicle - object
+	        point)
+	        
+	(:predicates (at ?l ?v)
+	             (has-image ?v ?l)
+	             (reachable ?l1 ?l2))
+	             
+	(:functions (distance ?l1 ?l2)
+	            (battery-level)
+	            (battery-capacity)
+	            (recharge-rate)
+	            (take-picture-time)
+	            (battery-consumed-taking-picture)
+	            (total-energy-used)
+	            (total-distance-travelled)
+	            (total-duration-mission))
+	
+	(:durative-action move
+	    :parameters (?v - vehicle ?l1 ?l2 - point)
+	    :duration (= ?duration (distance ?l1 ?l2))
+	    :condition (and (at start(at ?l1 ?v))
+	                    (at start(reachable ?l1 ?l2))
+	                    (at start(>= (battery-level) (distance ?l1 ?l2))))
+	    
+	    :effect (and    (at start(not(at ?l1 ?v)))
+	                    (at end(at ?l2 ?v))
+	                    (at end(decrease (battery-level) (distance ?l1 ?l2)))
+	                    (at end(increase (total-energy-used) (distance ?l1 ?l2)))
+	                    (at end(increase (total-distance-travelled) (distance ?l1 ?l2)))
+	                    (at end(increase (total-duration-mission) ?duration)))
+	)
+	
+	(:durative-action recharge-batteries
+	    :parameters ()
+	    :duration (= ?duration (/ (- (battery-capacity) (battery-level)) recharge-rate))
+	    :condition (and (at start(not(= (battery-capacity) (battery-level)))))
+	   
+	    :effect (and    (at end(assign (battery-level) (battery-capacity)))
+	                    (at end(increase (total-duration-mission) ?duration)))
+	)
+	
+	(:durative-action take-picture
+	    :parameters (?v - vehicle ?l - point)
+	    :duration (= ?duration (take-picture-time))
+	    :condition (and (at start(at ?l ?v))
+	                    (at start(> (battery-level) (battery-consumed-taking-picture)))
+	                    (over all(at ?l ?v)))
+	   
+	    :effect (and    (at start(has-image ?v ?l))
+	                    (at end(decrease (battery-level) (battery-consumed-taking-picture)))
+	                    (at end(increase (total-energy-used) (battery-consumed-taking-picture)))
+	                    (at end(increase (total-duration-mission) ?duration)))
+	)
+)
